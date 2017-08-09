@@ -40,8 +40,10 @@ var bendingCalcs = (function() {
 		$("#btnSetup").click(function(){showSetupForm()});
 		$("#btnCancel").click(function(){showMainForm()});
 		$("#btnSave").click(function(){saveSettings()});
-		$("#btnHelp").click(function(){showHelpForm()});
-		$("#btnBack").click(function(){showMainForm()});
+		$("#btnHelp1").click(function(){showMainHelp()});
+		$("#btnHelp2").click(function(){showSetupHelp()});
+		$("#btnBack1").click(function(){showMainForm()});
+		$("#btnBack2").click(function(){showSetupForm()});
 		
 		setDps();
 	}
@@ -194,7 +196,8 @@ var bendingCalcs = (function() {
 	function showSetupForm() {
 		showSettings();
 			$("#bendform").hide();
-			$("#helpform").hide();
+			$("#helpform1").hide();
+			$("#helpform2").hide();
 			$("#setupform").show();
 	}
 	
@@ -203,17 +206,26 @@ var bendingCalcs = (function() {
 	//
 	function showMainForm() {
 			$("#setupform").hide();
-			$("#helpform").hide();
+			$("#helpform1").hide();
+			$("#helpform2").hide();
 			$("#bendform").show();
 	}
 
 	//
-	// Show the help form
+	// Show the help forms
 	//
-	function showHelpForm() {
+	function showMainHelp() {
 			$("#setupform").hide();
 			$("#bendform").hide();
-			$("#helpform").show();
+			$("#helpform1").show();
+			$("#helpform2").hide();
+	}
+
+	function showSetupHelp() {
+			$("#setupform").hide();
+			$("#bendform").hide();
+			$("#helpform2").show();
+			$("#helpform1").hide();
 	}
 
 	//

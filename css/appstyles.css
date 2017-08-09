@@ -1,0 +1,109 @@
+body {
+	background-color: AliceBlue;
+	font-family: Arial, sans-serif;
+}
+
+.hdr {
+	font-size: 1.6em;
+	color: blue;
+}
+
+.help {
+	font-size: small;
+}
+
+.btns {
+	float: right;
+}
+
+.btn {
+	padding: 3px 12px;
+	margin: 1px 6px;
+	font-weight: bold;
+	border-width: 1px;
+	float: left;
+	-webkit-border-radius: .3125em;
+	border-radius: .3125em;
+}
+
+.lbl-wide {
+	padding-left: 10px;
+}
+
+input[type=number] {
+	width: 8em;
+}
+
+input[readonly] {
+	background-color: Silver;
+	width: 8em;
+}
+
+.form-content{
+	text-align: left;
+	width: 100%;
+	background: #08C;
+	padding: 10px 15px;
+	color: white;
+	box-sizing: border-box;
+}
+
+.tabs input[type=radio] {
+	display: none;
+	top: -9999px;
+	left: -9999px;
+}
+
+.tabs {
+	width: 100%;
+	float: none;
+	list-style: none;
+	position: relative;
+	padding: 0;
+	margin: 3px auto;
+}
+
+.tabs li{
+	float: left;
+}
+
+.tab-label {
+    display: block;
+    padding: 3px 3px;
+	border: 1px solid black;
+	border-bottom-style: none;
+    border-radius: 3px 3px 0 0;
+    color: #08C;
+    cursor: pointer;
+    position: relative;
+    top: 3px;
+}
+
+.tabs label:hover {
+	background: rgba(255,255,255,0.5);
+	top: 0;
+}
+
+[id^=tab]:checked + label {
+	background: #08C;
+	color: white;
+	top: 0;
+}
+
+[id^=tab]:checked ~ [id^=frm] {
+    display: block;
+}
+
+.tab-content{
+	z-index: 2;
+	display: none;
+	text-align: left;
+	width: 100%;
+	background: #08C;
+	padding: 10px 15px;
+	color: white;
+	position: absolute;
+	top: 30px;
+	left: 0;
+	box-sizing: border-box;
+}

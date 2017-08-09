@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.cg.metalbender" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>MetalBender</name>
+    <description>
+        Calculations for sheet metal bending using a bending break
+    </description>
+    <author email="support@phonegap.com" href="http://phonegap.com">
+        Chris Gill
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <icon src="icon.png" />
+    <icon src="res/icon-48.png" platform="android" qualifier="mdpi" />
+    <icon src="res/icon-72.png" platform="android" qualifier="hdpi" />
+    <icon src="res/icon-96.png" platform="android" qualifier="xhdpi" />
+    <icon src="res/icon-144.png" platform="android" qualifier="xxhdpi" />
+</widget>

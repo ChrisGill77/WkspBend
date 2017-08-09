@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=0.5, width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+
+    <title>Calculate bending allowance and setback for sheet metal bending</title>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/bending.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/appstyles.css">
+</head>
+<body>
+<form id="bendform">
+	<div class="hdr">
+		Sheet Metal Bending
+		<div class="btns">
+			<button type="button" class="btn" id="btnCalc">Calculate</button>
+			<button type="reset" class="btn" id="btnClear">Reset</button>
+			<button type="button" class="btn" id="btnSetup">Setup</button>
+			<button type="button" class="btn" id="btnHelp">Help</button>
+		</div>
+	</div>
+	<div class="form-content">
+<table>
+	<tr>
+		<td>Type of material:</td>
+		<td colspan="2">
+		<label for="mtlSoft">Soft</label><input name="fldMaterial" type="radio" value="soft" id="mtlSoft">
+		<label for="mtlMedium" class="lbl-wide">Medium</label><input name="fldMaterial" type="radio" value="medium" id="mtlMedium" checked>
+		<label for="mtlHard" class="lbl-wide">Hard</label><input name="fldMaterial" type="radio" value="hard" id="mtlHard">
+	</tr>
+	<tr>
+		<td><label for="fldThickness">Thickness, </label><label for="fldRadius">internal radius:</label></td>
+		<td><input id="fldThickness" type="number" min="0" max="10000" value="0" title="Thickness of metal"></td>
+		<td><input id="fldRadius" type="number" min="0" max="10000" value="0" title="Internal radius of the bend"></td>
+	</tr>
+	<tr>
+		<td><label for="fldAngle">Bend angle:</label></td>
+		<td><input id="fldAngle" type="number" min="0" max="180" value="90" title="Angle through which the metal is bent"></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td><label for="fldKvalue">K value (0 for default):</label></td>
+		<td><input id="fldKvalue" type="number" min="0" max="1" value="0" title="K value for radius-to-thickness ratio"></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td><label for="fldFlange1">Flange lengths:</label></td>
+		<td><input id="fldFlange1" type="number" min="0" max="10000" value="0" title="Distance from end of flange 1 to outside of bend"></td>
+		<td><input id="fldFlange2" type="number" min="0" max="10000" value="0" title="Distance from end of flange 2 to outside of bend"></td>
+	</tr>
+	<tr>
+		<td><label for="fldSetback">Setback, bending allowance:</label></td>
+		<td><input id="fldSetback" type="text" readonly title="Distance from start of bend to outside of bend"></td>
+		<td><input id="fldAllowance" type="text" readonly title="Distance around the centre-line of the bend"></td>
+	</tr>
+	<tr>
+		<td><label for="fldLeg1">Leg lengths:</label></td>
+		<td><input id="fldLeg1" type="text" readonly title="Distance from end of flange 1 to start of bend"></td>
+		<td><input id="fldLeg2" type="text" readonly title="Distance from end of flange 2 to start of bend"></td>
+	</tr>
+	<tr>
+		<td><label for="fldMetal">Total metal used:</label></td>
+		<td><input id="fldMetal" type="text" readonly title="Overall length of metal required for two flanges"></td>
+		<td></td>
+	</tr>
+</table>
+<br>Set hinge on the flange length and clamp plate on the leg length.
+</div>
+</form>
+
+<form id="setupform" hidden>
+	<div class="hdr">
+		Settings
+		<div class="btns">
+			<button type="button" class="btn" id="btnSave">Save</button>
+			<button type="button" class="btn" id="btnCancel">Cancel</button>
+		</div>
+	</div>
+	<div class="form-content">
+	<table>
+	<tr><th>R/T up to</th><th>Soft metal</th><th>Medium</th><th>Hard</th><tr>
+	<tr>
+		<td><input id="fldKbrk0" type="number" min="0" max="10" title="Radius to thickness ratio, row 1"></td>
+		<td><input id="fldKsft0" type="number" min="0.01" max="1" step="0.01" title="Soft material K value, row 1"></td>
+		<td><input id="fldKmed0" type="number" min="0.01" max="1" step="0.01" title="Medium material K value, row 1"></td>
+		<td><input id="fldKhrd0" type="number" min="0.01" max="1" step="0.01" title="Hard material K value, row 1"></td>
+	</tr>
+	<tr>
+		<td><input id="fldKbrk1" type="number" min="0" max="10" title="Radius to thickness ratio, row 2"></td>
+		<td><input id="fldKsft1" type="number" min="0" max="1" step="0.01" title="Soft material K value, row 2"></td>
+		<td><input id="fldKmed1" type="number" min="0" max="1" step="0.01" title="Medium material K value, row 2"></td>
+		<td><input id="fldKhrd1" type="number" min="0" max="1" step="0.01" title="Hard material K value, row 2"></td>
+	</tr>
+	<tr>
+		<td><input id="fldKbrk2" type="number" min="0" max="10" title="Radius to thickness ratio, row 3"></td>
+		<td><input id="fldKsft2" type="number" min="0" max="1" step="0.01" title="Soft material K value, row 3"></td>
+		<td><input id="fldKmed2" type="number" min="0" max="1" step="0.01" title="Medium material K value, row 3"></td>
+		<td><input id="fldKhrd2" type="number" min="0" max="1" step="0.01" title="Hard material K value, row 3"></td>
+	</tr>
+	<tr>
+		<td><input id="fldKbrk3" type="number" min="0" max="10" title="Radius to thickness ratio, row 4"></td>
+		<td><input id="fldKsft3" type="number" min="0" max="1" step="0.01" title="Soft material K value, row 4"></td>
+		<td><input id="fldKmed3" type="number" min="0" max="1" step="0.01" title="Medium material K value, row 4"></td>
+		<td><input id="fldKhrd3" type="number" min="0" max="1" step="0.01" title="Hard material K value, row 4"></td>
+	</tr>
+	<tr>
+		<td><input id="fldKbrk4" type="number" min="0" max="10" title="Radius to thickness ratio, row 5"></td>
+		<td><input id="fldKsft4" type="number" min="0" max="1" step="0.01" title="Soft material K value, row 5"></td>
+		<td><input id="fldKmed4" type="number" min="0" max="1" step="0.01" title="Medium material K value, row 5"></td>
+		<td><input id="fldKhrd4" type="number" min="0" max="1" step="0.01" title="Hard material K value, row 5"></td>
+	</tr>
+</table>
+Leave the R/T value (radius / thickness ratio) empty in the last line to signify "remaining values"
+<br><br>
+<label for="fldDps">Decimal places</label>:&nbsp;<input id="fldDps" type="number" min="0" max="5" size="5" title="Number of decimal places to display">
+</div>
+</form>
+
+<form id="helpform" hidden>
+	<div class="hdr">
+		Sheet Metal Bending Help
+		<div class="btns">
+			<button type="button" class="btn" id="btnBack">Back</button>
+		</div>
+	</div>
+	<div class="help">
+This app performs the calculations required for bending sheet metal in a bending break. This is not intended for use with industrial benders.
+
+<h3>Notes on the calculation</h3>
+The calculation relies on a K value, which is determined by the properties of the metal, its thickness and the bending method. Because there are no standard values, workshops often have their own tables that work with their methodology and materials. There are, however, tables of typical values for soft (aluminium), medium (mild steel) and hard (other non-brittle alloys).
+<p>
+The app lets the user select a soft, medium or hard metal and either provide a K value or leave it empty. In the latter case the app will use a value from its built-in table (see below).
+
+<h3>Settings</h3>
+The Setup button opens a second page where the user can edit the table of K values. These are arranged by type of metal (soft, medium or hard) and the ratio of the bending radius to the metal thickness. Leave the R/T ratio empty on the last row to account for ratios greater than on the penultimate row.
+<p>
+The number of decimals on the main page can also be set (the settings page always shows two decimals).
+<p>
+All settings are stored locally and re-loaded when the app opens.
+	</div>
+</form>
+<script>
+	window.onload = function()
+    {
+		document.addEventListener("deviceready", bendingCalcs.init(), false);
+    }
+</script>
+</body>
+</html>
